@@ -9,4 +9,4 @@ if a picture is not found for the article a picture of a horse wearing blinders 
 
 keep in mind it takes a moment to load and refresh.
 
-I may add additional features in the near future like a share and option 
+I may add additional features in the near future like a share option 
