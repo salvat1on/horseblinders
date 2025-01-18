@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import PhotoImage
 import feedparser
 import requests
 from PIL import Image, ImageTk
@@ -8,21 +7,24 @@ from io import BytesIO
 from threading import Thread
 import itertools
 import os
+import webbrowser
+import random
 
-# list of RSS feed URLs
+# List of RSS feed URLs
 RSS_FEEDS = [
-    "https://rss.cnn.com/rss/cnn_topstories.rss",
-    "https://www.reutersagency.com/feed/?taxonomy=best-sectors&post_type=best",
-    "https://feeds.bbci.co.uk/news/world/rss.xml",
-    "https://feeds.arstechnica.com/arstechnica/security",
+    "http://rss.slashdot.org/Slashdot/slashdotMain?format=xml",
+    "https://0ut3r.space/atom.xml",
+    "https://www.kitploit.com//feeds/posts/default",
+    "https://www.darknet.org.uk/feed",
+    "https://freedomhacker.net/feed/",
     "https://feeds.arstechnica.com/arstechnica/technology-lab",
-    "https://www.sciencedaily.com/rss/all.xml",
-    "https://www.space.com/feeds/all",
+    "http://www.anonhack.in/feed/",
+    "http://feeds.howtogeek.com/HowToGeek",
     "https://www.nasa.gov/rss/dyn/breaking_news.rss",
     "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
     "https://www.theregister.com/headlines.atom",
-    "https://feeds.foxnews.com/foxnews/scitech",
-    "https://feeds.foxnews.com/foxnews/world",
+    "https://latesthackingnews.com/feed/",
+    "https://techcrunch.com/feed/",
     "https://www.vice.com/en/rss",
     "https://feeds.feedburner.com/cryptocoinsnews",
     "https://threatpost.com/feed/",
@@ -62,6 +64,9 @@ def fetch_feeds():
 
             if not any(keyword.lower() in title.lower() for keyword in EXCLUDE_KEYWORDS):
                 articles.append((title, link, image))
+    
+    # Shuffle articles to ensure they're mixed up from all sources
+    random.shuffle(articles)
     return articles
 
 # GUI class
@@ -157,6 +162,10 @@ def create_gui():
             frame = tk.Frame(self.frame, bg="#1a1a2e", pady=10, padx=10)
             frame.pack(fill=tk.X, pady=5)
 
+            # Store the article's title and link in the frame for sharing purposes
+            frame.title = title
+            frame.link = link
+
             if image_url:
                 try:
                     response = requests.get(image_url, stream=True, timeout=5)
@@ -204,9 +213,25 @@ def create_gui():
             link_label.pack(anchor="w")
             link_label.bind("<Button-1>", lambda e: self.open_link(link))
 
+            # Bluesky share button for each article
+            bluesky_button = tk.Button(
+                frame,
+                text="Share on Bluesky",
+                font=("Helvetica", 10),
+                fg="#1a1a2e",
+                bg="#39ff14",
+                relief="raised",
+                bd=3,
+                command=lambda: self.share_on_bluesky(title, link)
+            )
+            bluesky_button.pack(side=tk.RIGHT, padx=10, pady=5)
+
         def open_link(self, url):
-            import webbrowser
             webbrowser.open(url)
+
+        def share_on_bluesky(self, title, link):
+            bluesky_url = f"https://bsky.app/intent/compose?text={title} {link}"
+            webbrowser.open(bluesky_url)  # This will open the Bluesky compose post with title and link pre-filled
 
     root = tk.Tk()
     gui = RSSViewer(root)
