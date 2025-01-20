@@ -8,5 +8,5 @@ the same goes for the exclude keywords.
 if a picture is not found for the article a picture of a horse wearing blinders is used 
 
 keep in mind it takes a moment to load and refresh.
-
-I may add additional features in the near future like a share option 
+ 
+Blue sky share option added
