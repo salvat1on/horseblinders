@@ -8,3 +8,4 @@ To remove an address or exclusion word simply click on the address or word then 
 keep in mind it takes a moment to load and refresh.
  
 Blue sky share option added
+![horseblinders](https://github.com/user-attachments/assets/c011f629-ccb5-46e3-b585-61351a627391)
